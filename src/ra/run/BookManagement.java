@@ -79,7 +79,6 @@ public class BookManagement {
 
      public void sortByPrice() {
          for (int i = 0; i < currenIndex - 1; i++) {
-
              for (int j = i + 1; j < currenIndex; j++) {
                  if (arrBook[i].getInterest() > arrBook[j].getInterest()) {
                      Book temp = arrBook[i];
@@ -127,6 +126,7 @@ public class BookManagement {
         for (int i = 0; i < currenIndex; i++) {
             if (arrBook[i].getBookName().equalsIgnoreCase(search) || arrBook[i].getDescriptions().equalsIgnoreCase(search)) {
                 System.out.println("Sách tìm thấy theo tên hoặc mô tả trong trong danh lục là " + arrBook[i].getBookName());
+                break;
             } else {
                 System.err.println("Không tìm thấy sách theo tên hoặc mô tả");
             }
@@ -134,65 +134,60 @@ public class BookManagement {
     }
 
     public void updateBookById(Scanner sc) {
-        System.out.println("Nhập vào mã sách cần thay đổi trông tin");
-        int idUpdate = Integer.parseInt(sc.nextLine()) ;
-        int foundIndex = searchById(idUpdate) ;
-        if ( foundIndex >= 0 ) {
+        System.out.println("Nhập vào mã sách cần thay đổi thông tin");
+        int idUpdate = Integer.parseInt(sc.nextLine());
+        int foundIndex = searchById(idUpdate);
+
+        if (foundIndex >= 0) {
             //Nhập thông tin cập nhật
-            System.out.println("Nhập vào tên tác giả cần cập nhật:");
+            System.out.println("Nhập vào tên sách cần cập nhật:");
             String nameBook = sc.nextLine();
-            if (!nameBook.trim().isEmpty()){
+            if (!nameBook.trim().isEmpty()) {
                 arrBook[foundIndex].setBookName(nameBook);
             }
 
             System.out.println("Nhập vào tên tác giả cần cập nhật:");
             String tacgia = sc.nextLine();
-            if (!tacgia.trim().isEmpty()){
+            if (!tacgia.trim().isEmpty()) {
                 arrBook[foundIndex].setAuthor(tacgia);
             }
+
             System.out.println("Nhập vào mô tả sách cần cập nhật:");
             String mota = sc.nextLine();
-            if(!mota.trim().isEmpty()){
-                arrBook[foundIndex].setAuthor(mota);
-                while (true) {
-                    if (mota.length() <= 10 ) {
-                        System.err.println("Mô tả sản phẩm ít nhất 10 ký tự, vui long nhập lại");
-                    } else {
-                        arrBook[foundIndex].setAuthor(mota);
-                        break;
-                    }
+            if (!mota.trim().isEmpty()) {
+                while (mota.length() <= 10) {
+                    System.err.println("Mô tả sản phẩm ít nhất 10 ký tự, vui lòng nhập lại:");
+                    mota = sc.nextLine();
                 }
-
+                arrBook[foundIndex].setDescriptions(mota);
             }
+
             System.out.println("Giá nhập vào cần cập nhật:");
-            String  priceImport = sc.nextLine();
-            if (!priceImport.trim().isEmpty()){
-                arrBook[foundIndex].setImportPrice(Double.parseDouble(priceImport));
-                while (true) {
-                    if (Double.parseDouble(priceImport) <= 0) {
-                        System.err.println("Giá nhập vào chưa hợp lệ, vui lòng nhập lại ");
-                    } else {
-                        arrBook[foundIndex].setImportPrice(Double.parseDouble(priceImport));
-                        break;
-                    }
+            String priceImport = sc.nextLine();
+            if (!priceImport.trim().isEmpty()) {
+                double importPrice = Double.parseDouble(priceImport);
+                while (importPrice <= 0) {
+                    System.err.println("Giá nhập vào chưa hợp lệ, vui lòng nhập lại:");
+                    priceImport = sc.nextLine();
+                    importPrice = Double.parseDouble(priceImport);
                 }
+                arrBook[foundIndex].setImportPrice(importPrice);
             }
 
             System.out.println("Giá bán ra cần cập nhật:");
-            String  priceExport = sc.nextLine();
-            if (!priceExport.trim().isEmpty()){
-                arrBook[foundIndex].setExportPrice(Double.parseDouble(priceExport));
-                while (true) {
-                    if (Double.parseDouble(priceExport) >= (Double.parseDouble(priceImport) * 1.2)) {
-                        System.err.println("Giá nhập vào chưa hợp lệ, vui lòng nhập lại ");
-                    } else {
-                        arrBook[foundIndex].setImportPrice(Double.parseDouble(priceExport));
-                        break;
-                    }
+            String priceExport = sc.nextLine();
+            if (!priceExport.trim().isEmpty()) {
+                double exportPrice = Double.parseDouble(priceExport);
+                while (exportPrice < arrBook[foundIndex].getImportPrice() * 1.2) {
+                    System.err.println("Giá bán ra phải ít nhất 1.2 lần giá nhập, vui lòng nhập lại:");
+                    priceExport = sc.nextLine();
+                    exportPrice = Double.parseDouble(priceExport);
                 }
+                arrBook[foundIndex].setExportPrice(exportPrice);
             }
         } else {
             System.err.println("Không tìm thấy sách trong danh mục");
         }
     }
+
 }

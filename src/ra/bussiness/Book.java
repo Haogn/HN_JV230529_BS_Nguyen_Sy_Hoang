@@ -17,6 +17,7 @@ public class Book {
     public Book() {
         this.bookId = nextId++;
         this.bookStatus = true ;
+        this.interest = (float) (exportPrice- importPrice) ;
     }
 
     public Book(int bookId, String bookName, String author, String descriptions, double importPrice, double exportPrice, float interest, boolean bookStatus) {
@@ -161,7 +162,7 @@ public class Book {
         while (true) {
             System.out.println("Gia ban ra ");
             double priceExport = Double.parseDouble(sc.nextLine()) ;
-            if (priceExport >= (priceExport * 1.2)) {
+            if (priceExport < (importPrice * 1.2)) {
                 System.err.println("Gia ban ra chua hop ly, Vui long nhap lai ❤");
             } else {
                 this.exportPrice = priceExport ;
@@ -182,7 +183,7 @@ public class Book {
         System.out.println("Mô tả sách: " + descriptions);
         System.out.printf("Giá nhập vào: %.1f VND\n" , importPrice );
         System.out.printf("Giá bán ra: %.1f VND\n" , exportPrice);
-        System.out.printf("Lợi nhuận: %.1f - %.1f VND\n" , exportPrice , importPrice );
+        System.out.println("Lợi nhuận: " + interest + " VND" );
         System.out.println("Trạng thái: " + (bookStatus?"Mo ban":"Khong ban"));
     }
 
